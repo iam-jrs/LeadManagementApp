@@ -1,0 +1,386 @@
+{
+  "leads": [
+    {
+      "id": 1,
+      "status": "new",
+      "sub_status": "new",
+      "source": "google",
+      "created_at": "2024-01-15T10:30:00Z",
+      "updated_at": "2024-01-15T14:20:00Z",
+      "client": {
+        "id": 1,
+        "name": "Ahmed Al Mansouri",
+        "email": "ahmed@example.com",
+        "mobile_number": "501234567",
+        "dial_code": "+971"
+      },
+      "project": { "id": 1, "name": "Marina Heights", "builder": "Emaar Properties" },
+      "agent": { "id": 1, "name": "Sarah Johnson", "email": "sarah@company.com" },
+      "comments": "Interested in 2BR apartment"
+    },
+    {
+      "id": 2,
+      "status": "contacted",
+      "sub_status": "details_shared",
+      "source": "facebook",
+      "created_at": "2024-01-14T09:15:00Z",
+      "updated_at": "2024-01-16T11:00:00Z",
+      "client": {
+        "id": 2,
+        "name": "Maria Santos",
+        "email": "maria@example.com",
+        "mobile_number": "551234567",
+        "dial_code": "+971"
+      },
+      "project": { "id": 2, "name": "Palm Residences", "builder": "Nakheel" },
+      "agent": { "id": 2, "name": "John Smith", "email": "john@company.com" },
+      "comments": null
+    },
+    {
+      "id": 3,
+      "status": "qualified",
+      "sub_status": "budget_confirmed",
+      "source": "instagram",
+      "created_at": "2024-01-12T12:00:00Z",
+      "updated_at": "2024-01-13T13:30:00Z",
+      "client": {
+        "id": 3,
+        "name": "Ravi Sharma",
+        "email": "ravi@example.com",
+        "mobile_number": "9876543210",
+        "dial_code": "+91"
+      },
+      "project": { "id": 3, "name": "Downtown Plaza", "builder": "Damac" },
+      "agent": { "id": 3, "name": "Ahmed Hassan", "email": "ahmed@company.com" },
+      "comments": "Looking for investment property"
+    },
+    {
+      "id": 4,
+      "status": "meeting_scheduled",
+      "sub_status": "site_visit",
+      "source": "referral",
+      "created_at": "2024-01-10T15:00:00Z",
+      "updated_at": "2024-01-11T10:00:00Z",
+      "client": {
+        "id": 4,
+        "name": "Fatima Noor",
+        "email": "fatima@example.com",
+        "mobile_number": "502345678",
+        "dial_code": "+971"
+      },
+      "project": { "id": 4, "name": "Creek Towers", "builder": "Emaar Properties" },
+      "agent": { "id": 1, "name": "Sarah Johnson", "email": "sarah@company.com" },
+      "comments": "Wants corner unit"
+    },
+    {
+      "id": 5,
+      "status": "hot",
+      "sub_status": "negotiation",
+      "source": "direct",
+      "created_at": "2024-01-08T08:00:00Z",
+      "updated_at": "2024-01-09T09:00:00Z",
+      "client": {
+        "id": 5,
+        "name": "Priya Mehta",
+        "email": "priya@example.com",
+        "mobile_number": "9123456789",
+        "dial_code": "+91"
+      },
+      "project": { "id": 5, "name": "Business Bay Central", "builder": "Damac" },
+      "agent": { "id": 2, "name": "John Smith", "email": "john@company.com" },
+      "comments": "Ready to book soon"
+    },
+    {
+      "id": 6,
+      "status": "booking_done",
+      "sub_status": "payment_pending",
+      "source": "google",
+      "created_at": "2024-01-07T11:00:00Z",
+      "updated_at": "2024-01-08T12:00:00Z",
+      "client": {
+        "id": 6,
+        "name": "Omar Khalid",
+        "email": "omar@example.com",
+        "mobile_number": "503456789",
+        "dial_code": "+971"
+      },
+      "project": { "id": 1, "name": "Marina Heights", "builder": "Emaar Properties" },
+      "agent": { "id": 3, "name": "Ahmed Hassan", "email": "ahmed@company.com" },
+      "comments": "Awaiting payment confirmation"
+    },
+    {
+      "id": 7,
+      "status": "meeting_done",
+      "sub_status": "follow_up",
+      "source": "instagram",
+      "created_at": "2024-01-06T10:00:00Z",
+      "updated_at": "2024-01-07T11:00:00Z",
+      "client": {
+        "id": 7,
+        "name": "Lina Haddad",
+        "email": "lina@example.com",
+        "mobile_number": "504567890",
+        "dial_code": "+971"
+      },
+      "project": { "id": 2, "name": "Palm Residences", "builder": "Nakheel" },
+      "agent": { "id": 1, "name": "Sarah Johnson", "email": "sarah@company.com" },
+      "comments": "Requested more info"
+    },
+    {
+      "id": 8,
+      "status": "qualified",
+      "sub_status": "docs_verified",
+      "source": "referral",
+      "created_at": "2024-01-05T09:00:00Z",
+      "updated_at": "2024-01-06T10:00:00Z",
+      "client": {
+        "id": 8,
+        "name": "Mohammed Ali",
+        "email": "mohammed@example.com",
+        "mobile_number": "505678901",
+        "dial_code": "+971"
+      },
+      "project": { "id": 3, "name": "Downtown Plaza", "builder": "Damac" },
+      "agent": { "id": 2, "name": "John Smith", "email": "john@company.com" },
+      "comments": "Documents verified"
+    },
+    {
+      "id": 9,
+      "status": "contacted",
+      "sub_status": "call_back",
+      "source": "facebook",
+      "created_at": "2024-01-04T08:00:00Z",
+      "updated_at": "2024-01-05T09:00:00Z",
+      "client": {
+        "id": 9,
+        "name": "Saeed Al Farsi",
+        "email": "saeed@example.com",
+        "mobile_number": "506789012",
+        "dial_code": "+971"
+      },
+      "project": { "id": 4, "name": "Creek Towers", "builder": "Emaar Properties" },
+      "agent": { "id": 3, "name": "Ahmed Hassan", "email": "ahmed@company.com" },
+      "comments": "Asked for call back"
+    },
+    {
+      "id": 10,
+      "status": "new",
+      "sub_status": "new",
+      "source": "direct",
+      "created_at": "2024-01-03T07:00:00Z",
+      "updated_at": "2024-01-04T08:00:00Z",
+      "client": {
+        "id": 10,
+        "name": "Emily Clark",
+        "email": "emily@example.com",
+        "mobile_number": "507890123",
+        "dial_code": "+44"
+      },
+      "project": { "id": 5, "name": "Business Bay Central", "builder": "Damac" },
+      "agent": { "id": 1, "name": "Sarah Johnson", "email": "sarah@company.com" },
+      "comments": "First time buyer"
+    },
+    {
+      "id": 11,
+      "status": "qualified",
+      "sub_status": "budget_confirmed",
+      "source": "google",
+      "created_at": "2024-01-02T06:00:00Z",
+      "updated_at": "2024-01-03T07:00:00Z",
+      "client": {
+        "id": 11,
+        "name": "George Brown",
+        "email": "george@example.com",
+        "mobile_number": "508901234",
+        "dial_code": "+44"
+      },
+      "project": { "id": 1, "name": "Marina Heights", "builder": "Emaar Properties" },
+      "agent": { "id": 2, "name": "John Smith", "email": "john@company.com" },
+      "comments": "Budget confirmed"
+    },
+    {
+      "id": 12,
+      "status": "meeting_scheduled",
+      "sub_status": "site_visit",
+      "source": "instagram",
+      "created_at": "2024-01-01T05:00:00Z",
+      "updated_at": "2024-01-02T06:00:00Z",
+      "client": {
+        "id": 12,
+        "name": "Nina Patel",
+        "email": "nina@example.com",
+        "mobile_number": "509012345",
+        "dial_code": "+91"
+      },
+      "project": { "id": 2, "name": "Palm Residences", "builder": "Nakheel" },
+      "agent": { "id": 3, "name": "Ahmed Hassan", "email": "ahmed@company.com" },
+      "comments": "Scheduled for site visit"
+    },
+    {
+      "id": 13,
+      "status": "hot",
+      "sub_status": "negotiation",
+      "source": "referral",
+      "created_at": "2023-12-31T04:00:00Z",
+      "updated_at": "2024-01-01T05:00:00Z",
+      "client": {
+        "id": 13,
+        "name": "Ali Reza",
+        "email": "ali@example.com",
+        "mobile_number": "510123456",
+        "dial_code": "+98"
+      },
+      "project": { "id": 3, "name": "Downtown Plaza", "builder": "Damac" },
+      "agent": { "id": 1, "name": "Sarah Johnson", "email": "sarah@company.com" },
+      "comments": "Negotiating price"
+    },
+    {
+      "id": 14,
+      "status": "booking_done",
+      "sub_status": "payment_pending",
+      "source": "facebook",
+      "created_at": "2023-12-30T03:00:00Z",
+      "updated_at": "2023-12-31T04:00:00Z",
+      "client": {
+        "id": 14,
+        "name": "Sofia Garcia",
+        "email": "sofia@example.com",
+        "mobile_number": "511234567",
+        "dial_code": "+34"
+      },
+      "project": { "id": 4, "name": "Creek Towers", "builder": "Emaar Properties" },
+      "agent": { "id": 2, "name": "John Smith", "email": "john@company.com" },
+      "comments": "Payment pending"
+    },
+    {
+      "id": 15,
+      "status": "meeting_done",
+      "sub_status": "follow_up",
+      "source": "direct",
+      "created_at": "2023-12-29T02:00:00Z",
+      "updated_at": "2023-12-30T03:00:00Z",
+      "client": {
+        "id": 15,
+        "name": "Chen Wei",
+        "email": "chen@example.com",
+        "mobile_number": "512345678",
+        "dial_code": "+86"
+      },
+      "project": { "id": 5, "name": "Business Bay Central", "builder": "Damac" },
+      "agent": { "id": 3, "name": "Ahmed Hassan", "email": "ahmed@company.com" },
+      "comments": "Follow up after meeting"
+    },
+    {
+      "id": 16,
+      "status": "new",
+      "sub_status": "new",
+      "source": "google",
+      "created_at": "2023-12-28T01:00:00Z",
+      "updated_at": "2023-12-29T02:00:00Z",
+      "client": {
+        "id": 16,
+        "name": "Elena Petrova",
+        "email": "elena@example.com",
+        "mobile_number": "513456789",
+        "dial_code": "+7"
+      },
+      "project": { "id": 1, "name": "Marina Heights", "builder": "Emaar Properties" },
+      "agent": { "id": 1, "name": "Sarah Johnson", "email": "sarah@company.com" },
+      "comments": "Interested in penthouse"
+    },
+    {
+      "id": 17,
+      "status": "contacted",
+      "sub_status": "details_shared",
+      "source": "instagram",
+      "created_at": "2023-12-27T00:00:00Z",
+      "updated_at": "2023-12-28T01:00:00Z",
+      "client": {
+        "id": 17,
+        "name": "Mohamed Salah",
+        "email": "msalah@example.com",
+        "mobile_number": "514567890",
+        "dial_code": "+20"
+      },
+      "project": { "id": 2, "name": "Palm Residences", "builder": "Nakheel" },
+      "agent": { "id": 2, "name": "John Smith", "email": "john@company.com" },
+      "comments": "Shared details"
+    },
+    {
+      "id": 18,
+      "status": "qualified",
+      "sub_status": "budget_confirmed",
+      "source": "referral",
+      "created_at": "2023-12-26T23:00:00Z",
+      "updated_at": "2023-12-27T00:00:00Z",
+      "client": {
+        "id": 18,
+        "name": "Isabella Rossi",
+        "email": "isabella@example.com",
+        "mobile_number": "515678901",
+        "dial_code": "+39"
+      },
+      "project": { "id": 3, "name": "Downtown Plaza", "builder": "Damac" },
+      "agent": { "id": 3, "name": "Ahmed Hassan", "email": "ahmed@company.com" },
+      "comments": "Budget confirmed"
+    },
+    {
+      "id": 19,
+      "status": "meeting_scheduled",
+      "sub_status": "site_visit",
+      "source": "facebook",
+      "created_at": "2023-12-25T22:00:00Z",
+      "updated_at": "2023-12-26T23:00:00Z",
+      "client": {
+        "id": 19,
+        "name": "Lucas Silva",
+        "email": "lucas@example.com",
+        "mobile_number": "516789012",
+        "dial_code": "+55"
+      },
+      "project": { "id": 4, "name": "Creek Towers", "builder": "Emaar Properties" },
+      "agent": { "id": 1, "name": "Sarah Johnson", "email": "sarah@company.com" },
+      "comments": "Site visit scheduled"
+    },
+    {
+      "id": 20,
+      "status": "hot",
+      "sub_status": "negotiation",
+      "source": "direct",
+      "created_at": "2023-12-24T21:00:00Z",
+      "updated_at": "2023-12-25T22:00:00Z",
+      "client": {
+        "id": 20,
+        "name": "Anna Müller",
+        "email": "anna@example.com",
+        "mobile_number": "517890123",
+        "dial_code": "+49"
+      },
+      "project": { "id": 5, "name": "Business Bay Central", "builder": "Damac" },
+      "agent": { "id": 2, "name": "John Smith", "email": "john@company.com" },
+      "comments": "Negotiating terms"
+    }
+  ],
+  "projects": [
+    { "id": 1, "name": "Marina Heights", "builder": "Emaar Properties" },
+    { "id": 2, "name": "Palm Residences", "builder": "Nakheel" },
+    { "id": 3, "name": "Downtown Plaza", "builder": "Damac" },
+    { "id": 4, "name": "Creek Towers", "builder": "Emaar Properties" },
+    { "id": 5, "name": "Business Bay Central", "builder": "Damac" }
+  ],
+  "agents": [
+    { "id": 1, "name": "Sarah Johnson", "email": "sarah@company.com" },
+    { "id": 2, "name": "John Smith", "email": "john@company.com" },
+    { "id": 3, "name": "Ahmed Hassan", "email": "ahmed@company.com" }
+  ],
+  "sources": ["google", "facebook", "instagram", "referral", "direct"],
+  "statuses": [
+    { "value": "new", "label": "New" },
+    { "value": "contacted", "label": "Contacted" },
+    { "value": "qualified", "label": "Qualified" },
+    { "value": "meeting_scheduled", "label": "Meeting Scheduled" },
+    { "value": "meeting_done", "label": "Meeting Done" },
+    { "value": "hot", "label": "Hot" },
+    { "value": "booking_done", "label": "Booking Done" }
+  ]
+}

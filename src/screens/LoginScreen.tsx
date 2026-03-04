@@ -1,12 +1,161 @@
-import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+  TouchableOpacity,
+} from 'react-native';
+import CustomButton from '../components/CustomButton';
+import CustomTextInput from '../components/CustomTextInput';
+import { useForm, Controller } from 'react-hook-form';
+import { storeTokens } from '../utils/tokenStorage';
+import { useAuth } from '../store/AuthContext';
+import { LoginFormValues } from '../types';
+import Toast from 'react-native-toast-message';
+
+const MOCK_OTP = '1234';
 
 const LoginScreen = () => {
+  const { login } = useAuth();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    setError,
+    clearErrors,
+  } = useForm<LoginFormValues>({
+    defaultValues: { email: '', otp: '', rememberMe: false },
+  });
+  const [loading, setLoading] = useState(false);
+  const [step, setStep] = useState<'email' | 'otp'>('email');
+  const [email, setEmail] = useState('');
+
+  const onSubmitEmail = (data: LoginFormValues) => {
+    clearErrors('email');
+    setEmail(data.email);
+    setStep('otp');
+  };
+
+  const onSubmitOtp = async (data: LoginFormValues) => {
+    setLoading(true);
+    clearErrors('otp');
+    setTimeout(async () => {
+      if (data.otp !== MOCK_OTP) {
+        setError('otp', { type: 'manual', message: 'Invalid OTP' });
+        setLoading(false);
+        return;
+      }
+      // Mock token generation and storage
+      const authToken = 'mock-token-123';
+      const refreshToken = 'mock-refresh-456';
+      try {
+        await storeTokens(authToken, refreshToken);
+        Toast.show({
+          type: 'success',
+          text1: 'Login Successful',
+        });
+        login();
+      } catch (error) {
+        Toast.show({
+          type: 'error',
+          text1: 'Failed to store token securely.',
+          text2: error instanceof Error ? error.message : 'Unknown error',
+        });
+      }
+      setLoading(false);
+    }, 1200);
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login Screen</Text>
-
-      <Button title="Login" onPress={() => {}} />
+      <Text style={styles.title}>Login</Text>
+      {step === 'email' && (
+        <View style={styles.formSection}>
+          <Controller
+            control={control}
+            name="email"
+            rules={{
+              required: 'Email is required',
+              pattern: {
+                value: /^[^@\s]+@[^@\s]+\.[^@\s]+$/,
+                message: 'Invalid email address',
+              },
+            }}
+            render={({ field: { onChange, value } }) => (
+              <CustomTextInput
+                hintText="Email"
+                autoCapitalize="none"
+                keyboardType="email-address"
+                inputValue={value}
+                onInputTextChange={onChange}
+                errStatus={!!errors.email}
+                showValidation={!!errors.email}
+                validationText={errors.email?.message}
+                style={styles.input}
+              />
+            )}
+          />
+          {/* {errors.email && (
+            <Text style={styles.error}>{errors.email.message}</Text>
+          )} */}
+          <CustomButton
+            title="Send OTP"
+            onPress={handleSubmit(onSubmitEmail)}
+            disabled={loading}
+          />
+        </View>
+      )}
+      {step === 'otp' && (
+        <View style={styles.formSection}>
+          <Controller
+            control={control}
+            name="otp"
+            rules={{
+              required: 'OTP is required',
+              minLength: { value: 4, message: 'OTP must be 4 digits' },
+              maxLength: { value: 4, message: 'OTP must be 4 digits' },
+              pattern: { value: /^\d{4}$/, message: 'OTP must be numeric' },
+            }}
+            render={({ field: { onChange, value } }) => (
+              <CustomTextInput
+                hintText="Enter OTP"
+                keyboardType="numeric"
+                isSecure
+                inputValue={value}
+                onInputTextChange={onChange}
+                maxLength={4}
+                errStatus={!!errors.otp}
+                showValidation={!!errors.otp}
+                validationText={errors.otp?.message}
+                // style={styles.input}
+              />
+            )}
+          />
+          {errors.otp && <Text style={styles.error}>{errors.otp.message}</Text>}
+          <Controller
+            control={control}
+            name="rememberMe"
+            render={({ field: { onChange, value } }) => (
+              <TouchableOpacity
+                style={styles.checkboxRow}
+                onPress={() => onChange(!value)}
+              >
+                <View
+                  style={[styles.checkbox, value && styles.checkboxChecked]}
+                />
+                <Text style={styles.checkboxLabel}>Remember me</Text>
+              </TouchableOpacity>
+            )}
+          />
+          <CustomButton
+            title="Login"
+            onPress={handleSubmit(onSubmitOtp)}
+            disabled={loading}
+          />
+        </View>
+      )}
+      {loading && <ActivityIndicator style={{ marginTop: 20 }} />}
     </View>
   );
 };
@@ -17,10 +166,51 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
+    padding: 16,
   },
   title: {
-    fontSize: 24,
-    marginBottom: 20,
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginBottom: 32,
+  },
+  formSection: {
+    width: '100%',
+    maxWidth: 340,
+    marginBottom: 16,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 6,
+    padding: 12,
+    marginBottom: 10,
+    fontSize: 16,
+    backgroundColor: '#fafafa',
+  },
+  error: {
+    color: 'red',
+    marginBottom: 8,
+  },
+  checkboxRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  checkbox: {
+    width: 20,
+    height: 20,
+    borderWidth: 1,
+    borderColor: '#888',
+    borderRadius: 4,
+    marginRight: 8,
+    backgroundColor: '#fff',
+  },
+  checkboxChecked: {
+    backgroundColor: '#007AFF',
+    borderColor: '#007AFF',
+  },
+  checkboxLabel: {
+    fontSize: 16,
   },
 });
 
