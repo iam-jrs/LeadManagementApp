@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   View,
   Text,
@@ -14,12 +14,14 @@ import { useAuth } from '../store/AuthContext';
 import { LoginFormValues } from '../types';
 import Toast from 'react-native-toast-message';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ThemeContext } from '../context/ThemeContext';
 import { createMMKV } from 'react-native-mmkv';
 
 const MOCK_OTP = '1234';
 
 const LoginScreen = () => {
   const { login } = useAuth();
+  const { theme } = useContext(ThemeContext);
    const storage =  createMMKV();
   const {
     control,
@@ -32,11 +34,11 @@ const LoginScreen = () => {
   });
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState<'email' | 'otp'>('email');
-  const [email, setEmail] = useState('');
+
 
   const onSubmitEmail = (data: LoginFormValues) => {
     clearErrors('email');
-    setEmail(data.email);
+  
     setStep('otp');
   };
 
@@ -72,8 +74,15 @@ const LoginScreen = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: theme.background }]}
+    >
+      <View style={{ alignItems: 'center', marginBottom: 40, gap: 10 }}>
+        <Text style={[styles.title, { color: theme.text }]}>Login</Text>
+        <Text style={{ color: theme.text, marginBottom: 20 }}>
+            {step === 'email'? 'Enter your email to get OTP.' : 'Enter the OTP sent to your email.'}
+        </Text>
+      </View>
       {step === 'email' && (
         <View style={styles.formSection}>
           <Controller
@@ -96,11 +105,13 @@ const LoginScreen = () => {
                 errStatus={!!errors.email}
                 showValidation={!!errors.email}
                 validationText={errors.email?.message}
-                style={styles.input}
+                style={
+                  styles.input
+                }
               />
             )}
           />
-        
+
           <CustomButton
             title="Send OTP"
             onPress={handleSubmit(onSubmitEmail)}
@@ -123,14 +134,14 @@ const LoginScreen = () => {
               <CustomTextInput
                 hintText="Enter OTP"
                 keyboardType="numeric"
-                isSecure
+                
                 inputValue={value}
                 onInputTextChange={onChange}
                 maxLength={4}
                 errStatus={!!errors.otp}
                 showValidation={!!errors.otp}
                 validationText={errors.otp?.message}
-                // style={styles.input}
+                style={styles.input}
               />
             )}
           />
@@ -143,9 +154,19 @@ const LoginScreen = () => {
                 onPress={() => onChange(!value)}
               >
                 <View
-                  style={[styles.checkbox, value && styles.checkboxChecked]}
+                  style={[
+                    styles.checkbox,
+                    {
+                      backgroundColor: value
+                        ? theme.primary
+                        : theme.inputBoxColor,
+                      borderColor: theme.primary,
+                    },
+                  ]}
                 />
-                <Text style={styles.checkboxLabel}>Remember me</Text>
+                <Text style={[styles.checkboxLabel, { color: theme.text }]}>
+                  Remember me
+                </Text>
               </TouchableOpacity>
             )}
           />
@@ -164,15 +185,15 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: 'center',
+    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
-    padding: 16,
+    // padding: 16,
+   
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 32,
   },
   formSection: {
     width: '100%',

@@ -1,5 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, { useContext } from 'react';
+import { ThemeContext } from '../context/ThemeContext';
 import {
   KeyboardTypeOptions,
   StyleSheet,
@@ -57,6 +58,7 @@ const CustomTextInput: React.FC<FormTextInputProps> = ({
   autoCapitalize = 'none',
   fontSize = 16,
 }) => {
+  const { theme } = useContext(ThemeContext);
   return (
     <View style={style}>
       <View
@@ -65,12 +67,12 @@ const CustomTextInput: React.FC<FormTextInputProps> = ({
           {
             borderColor: errStatus
               ? K.colorsConstants.red
-              : K.colorsConstants.greenSuccess,
+              : K.colorsConstants.primary,
             height: inputHeight,
             backgroundColor:
               showValidation && validationText
                 ? '#5A18184F'
-                : K.colorsConstants.white,
+                : theme.inputBoxColor ?? K.colorsConstants.white,
           },
         ]}
       >
@@ -83,12 +85,13 @@ const CustomTextInput: React.FC<FormTextInputProps> = ({
           style={[
             styles.inputText,
             {
-              color: editable ? K.colorsConstants.appTextColor : 'grey',
+              color: editable ? theme.text : 'grey',
               minHeight: inputHeight,
               textAlignVertical: 'top',
               verticalAlign: 'top',
               fontSize: fontSize ?? K.fontSizeConstants.regular,
               paddingTop: Platform.OS === 'android' ? 10 : isSecure ? 0 : 13,
+              backgroundColor: 'transparent',
             },
           ]}
           multiline={isSecure ? false : multiline}
@@ -106,7 +109,6 @@ const CustomTextInput: React.FC<FormTextInputProps> = ({
           autoCorrect={false}
           textContentType="none"
           autoComplete="off"
-        
         />
       </View>
       {showValidation && validationText && (

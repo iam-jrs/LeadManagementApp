@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { ThemeContext } from '../context/ThemeContext';
 import { View, Text, StyleSheet, TouchableOpacity, Linking, TextInput, ScrollView } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store/store';
@@ -11,6 +12,7 @@ import { K } from '../constants/AppConstants';
 
 const LeadDetailScreen = ({ route }: any) => {
   const { leadId } = route.params;
+  const { theme } = useContext(ThemeContext);
   const dispatch = useDispatch();
   const lead = useSelector((state: RootState) => state.lead.leads.find(l => l.id === leadId));
   const [status, setStatus] = useState(lead?.status || '');
@@ -31,7 +33,7 @@ const LeadDetailScreen = ({ route }: any) => {
 
   if (!lead) {
     return (
-      <View style={styles.container}><Text>Lead not found.</Text></View>
+      <View style={[styles.container, { backgroundColor: theme.background }] }><Text style={{ color: theme.text }}>Lead not found.</Text></View>
     );
   }
 
@@ -48,63 +50,89 @@ const LeadDetailScreen = ({ route }: any) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView
+      contentContainerStyle={[
+        styles.container,
+        { backgroundColor: theme.background },
+      ]}
+    >
       <View style={styles.section}>
-        <Text style={styles.label}>Client Name:</Text>
-        <Text style={styles.value}>{lead.client.name}</Text>
-        <Text style={styles.label}>Mobile:</Text>
-        <Text style={styles.value}>{lead.client.mobile_number}</Text>
-        <Text style={styles.label}>Email:</Text>
-        <Text style={styles.value}>{lead.client.email || '-'}</Text>
-        <Text style={styles.label}>Project:</Text>
-        <Text style={styles.value}>{lead.project.name}</Text>
-        <Text style={styles.label}>Assignee:</Text>
-        <Text style={styles.value}>{lead.agent.name}</Text>
-        <Text style={styles.label}>Source:</Text>
-        <Text style={styles.value}>{lead.source}</Text>
-        <Text style={styles.label}>Created:</Text>
-        <Text style={styles.value}>{new Date(lead.created_at).toLocaleString()}</Text>
+        <Text style={[styles.label, { color: theme.text }]}>Client Name:</Text>
+        <Text style={[styles.value, { color: theme.text }]}>
+          {lead.client.name}
+        </Text>
+        <Text style={[styles.label, { color: theme.text }]}>Mobile:</Text>
+        <Text style={[styles.value, { color: theme.text }]}>
+          {lead.client.mobile_number}
+        </Text>
+        <Text style={[styles.label, { color: theme.text }]}>Email:</Text>
+        <Text style={[styles.value, { color: theme.text }]}>
+          {lead.client.email || '-'}
+        </Text>
+        <Text style={[styles.label, { color: theme.text }]}>Project:</Text>
+        <Text style={[styles.value, { color: theme.text }]}>
+          {lead.project.name}
+        </Text>
+        <Text style={[styles.label, { color: theme.text }]}>Assignee:</Text>
+        <Text style={[styles.value, { color: theme.text }]}>
+          {lead.agent.name}
+        </Text>
+        <Text style={[styles.label, { color: theme.text }]}>Source:</Text>
+        <Text style={[styles.value, { color: theme.text }]}>{lead.source}</Text>
+        <Text style={[styles.label, { color: theme.text }]}>Created:</Text>
+        <Text style={[styles.value, { color: theme.text }]}>
+          {new Date(lead.created_at).toLocaleString()}
+        </Text>
       </View>
       <View style={styles.section}>
-        <Text style={styles.label}>Status:</Text>
+        <Text style={[styles.label, { color: theme.text }]}>Status:</Text>
         <Dropdown
-          style={styles.dropdown}
-          data={leadsData.statuses.map((s: any) => ({ label: s.label, value: s.value }))}
+          style={[styles.dropdown, { backgroundColor: theme.inputBoxColor }]}
+          data={leadsData.statuses.map((s: any) => ({
+            label: s.label,
+            value: s.value,
+          }))}
           labelField="label"
           valueField="value"
           value={status}
           onChange={handleStatusChange}
+          placeholderStyle={{ color: theme.subText }}
+          selectedTextStyle={{ color: theme.text }}
         />
       </View>
       <View style={styles.section}>
-        <Text style={styles.label}>Notes/Comments:</Text>
+        <Text style={[styles.label, { color: theme.text }]}>
+          Notes/Comments:
+        </Text>
         <TextInput
-          style={styles.textArea}
+          style={[
+            styles.textArea,
+            { backgroundColor: theme.inputBoxColor, color: theme.text },
+          ]}
           value={comment || ''}
           onChangeText={setComment}
           onBlur={handleCommentBlur}
           placeholder="Add notes or comments..."
+          placeholderTextColor={theme.subText}
           multiline
         />
       </View>
       <View style={styles.actionsRow}>
-       
         <CustomButton
-          title='Call'
+          title="Call"
           onPress={handleCall}
           style={styles.actionBtn}
         />
         <CustomButton
-          title='WhatsApp'
+          title="WhatsApp"
           onPress={handleWhatsApp}
           style={styles.actionBtn}
         />
         <CustomButton
-          title='Email'
+          title="Email"
           onPress={handleEmail}
           style={styles.actionBtn}
         />
-      
       </View>
     </ScrollView>
   );

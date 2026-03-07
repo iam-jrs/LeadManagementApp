@@ -1,5 +1,6 @@
 
-import React from 'react';
+import React, { useContext } from 'react';
+import { ThemeContext } from '../context/ThemeContext';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
@@ -11,12 +12,14 @@ import { Dropdown } from 'react-native-element-dropdown';
 import leadsData from '../mock/data.json';
 import CustomTextInput from '../components/CustomTextInput';
 import CustomButton from '../components/CustomButton';
+import { K } from '../constants/AppConstants';
 
 const AddLeadScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const leads = useSelector((state: RootState) => state.lead.leads);
   const { control, handleSubmit, formState: { errors }, reset } = useForm();
+  const { theme } = useContext(ThemeContext);
 
   const onSubmit = (data: any) => {
     // Prevent duplicate mobile number
@@ -48,13 +51,20 @@ const AddLeadScreen = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-    
+    <ScrollView
+      contentContainerStyle={[
+        styles.container,
+        { backgroundColor: theme.background },
+      ]}
+    >
       {/* Client Name */}
       <Controller
         control={control}
         name="clientName"
-        rules={{ required: 'Client name is required', minLength: { value: 2, message: 'Minimum 2 characters' } }}
+        rules={{
+          required: 'Client name is required',
+          minLength: { value: 2, message: 'Minimum 2 characters' },
+        }}
         render={({ field: { onChange, value, onBlur } }) => (
           <CustomTextInput
             hintText="Client Name"
@@ -75,7 +85,7 @@ const AddLeadScreen = () => {
         name="mobileNumber"
         rules={{
           required: 'Mobile number is required',
-          pattern: { value: /^\d{10,12}$/, message: 'Enter 10–12 digits' }
+          pattern: { value: /^\d{10,12}$/, message: 'Enter 10–12 digits' },
         }}
         render={({ field: { onChange, value, onBlur } }) => (
           <CustomTextInput
@@ -98,7 +108,10 @@ const AddLeadScreen = () => {
         control={control}
         name="email"
         rules={{
-          pattern: { value: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/, message: 'Invalid email format' }
+          pattern: {
+            value: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
+            message: 'Invalid email format',
+          },
         }}
         render={({ field: { onChange, value, onBlur } }) => (
           <CustomTextInput
@@ -122,17 +135,24 @@ const AddLeadScreen = () => {
         rules={{ required: 'Project is required' }}
         render={({ field: { onChange, value } }) => (
           <Dropdown
-            style={styles.dropdown}
-            data={leadsData.projects.map((p: any) => ({ label: p.name, value: p.id }))}
+            style={[styles.dropdown, { backgroundColor: theme.inputBoxColor }]}
+            data={leadsData.projects.map((p: any) => ({
+              label: p.name,
+              value: p.id,
+            }))}
             labelField="label"
             valueField="value"
             placeholder="Select Project"
             value={value}
             onChange={item => onChange(item.value)}
+            placeholderStyle={{ color: theme.subText }}
+            selectedTextStyle={{ color: theme.text }}
           />
         )}
       />
-      {errors.project && <Text style={styles.error}>{errors.project.message as string}</Text>}
+      {errors.project && (
+        <Text style={styles.error}>{errors.project.message as string}</Text>
+      )}
 
       {/* Source Dropdown */}
       <Controller
@@ -141,17 +161,24 @@ const AddLeadScreen = () => {
         rules={{ required: 'Source is required' }}
         render={({ field: { onChange, value } }) => (
           <Dropdown
-            style={styles.dropdown}
-            data={leadsData.sources.map((s: string) => ({ label: s.charAt(0).toUpperCase() + s.slice(1), value: s }))}
+            style={[styles.dropdown, { backgroundColor: theme.inputBoxColor }]}
+            data={leadsData.sources.map((s: string) => ({
+              label: s.charAt(0).toUpperCase() + s.slice(1),
+              value: s,
+            }))}
             labelField="label"
             valueField="value"
             placeholder="Select Source"
             value={value}
             onChange={item => onChange(item.value)}
+            placeholderStyle={{ color: theme.subText }}
+            selectedTextStyle={{ color: theme.text }}
           />
         )}
       />
-      {errors.source && <Text style={styles.error}>{errors.source.message as string}</Text>}
+      {errors.source && (
+        <Text style={styles.error}>{errors.source.message as string}</Text>
+      )}
 
       {/* Assignee Dropdown */}
       <Controller
@@ -160,18 +187,24 @@ const AddLeadScreen = () => {
         rules={{ required: 'Assignee is required' }}
         render={({ field: { onChange, value } }) => (
           <Dropdown
-            style={styles.dropdown}
-            data={leadsData.agents.map((a: any) => ({ label: a.name, value: a.id }))}
+            style={[styles.dropdown, { backgroundColor: theme.inputBoxColor }]}
+            data={leadsData.agents.map((a: any) => ({
+              label: a.name,
+              value: a.id,
+            }))}
             labelField="label"
             valueField="value"
             placeholder="Select Assignee"
             value={value}
             onChange={item => onChange(item.value)}
+            placeholderStyle={{ color: theme.subText }}
+            selectedTextStyle={{ color: theme.text }}
           />
         )}
       />
-      {errors.assignee && <Text style={styles.error}>{errors.assignee.message as string}</Text>}
-
+      {errors.assignee && (
+        <Text style={styles.error}>{errors.assignee.message as string}</Text>
+      )}
 
       <CustomButton
         title="Add Lead"
@@ -186,7 +219,6 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     alignItems: 'center',
-    backgroundColor: '#fff',
     padding: 20,
     gap: 12,
   },
@@ -201,24 +233,20 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     width: '100%',
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
+    borderColor: K.colorsConstants.primary,
+    borderWidth: 0.7,
+    borderRadius: 10,
     padding: 10,
     marginBottom: 10,
-    fontSize: 16,
-    backgroundColor: '#fafafa',
+    fontSize: K.fontSizeConstants.regular,
+
   },
   button: {
     width: '100%',
   },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
+ 
   error: {
-    color: 'red',
+    color: K.colorsConstants.red,
     marginBottom: 8,
     alignSelf: 'flex-start',
   },
