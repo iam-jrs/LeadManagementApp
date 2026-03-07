@@ -13,11 +13,14 @@ import { storeTokens } from '../utils/tokenStorage';
 import { useAuth } from '../store/AuthContext';
 import { LoginFormValues } from '../types';
 import Toast from 'react-native-toast-message';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { createMMKV } from 'react-native-mmkv';
 
 const MOCK_OTP = '1234';
 
 const LoginScreen = () => {
   const { login } = useAuth();
+   const storage =  createMMKV();
   const {
     control,
     handleSubmit,
@@ -56,6 +59,7 @@ const LoginScreen = () => {
           text1: 'Login Successful',
         });
         login();
+        storage.set('rememberMe', data.rememberMe ? true : false);
       } catch (error) {
         Toast.show({
           type: 'error',
@@ -68,7 +72,7 @@ const LoginScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Login</Text>
       {step === 'email' && (
         <View style={styles.formSection}>
@@ -96,9 +100,7 @@ const LoginScreen = () => {
               />
             )}
           />
-          {/* {errors.email && (
-            <Text style={styles.error}>{errors.email.message}</Text>
-          )} */}
+        
           <CustomButton
             title="Send OTP"
             onPress={handleSubmit(onSubmitEmail)}
@@ -132,7 +134,6 @@ const LoginScreen = () => {
               />
             )}
           />
-          {errors.otp && <Text style={styles.error}>{errors.otp.message}</Text>}
           <Controller
             control={control}
             name="rememberMe"
@@ -156,14 +157,14 @@ const LoginScreen = () => {
         </View>
       )}
       {loading && <ActivityIndicator style={{ marginTop: 20 }} />}
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
     padding: 16,
@@ -177,19 +178,12 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 340,
     marginBottom: 16,
+    gap:10
   },
   input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 6,
-    padding: 12,
+   
     marginBottom: 10,
-    fontSize: 16,
-    backgroundColor: '#fafafa',
-  },
-  error: {
-    color: 'red',
-    marginBottom: 8,
+   
   },
   checkboxRow: {
     flexDirection: 'row',

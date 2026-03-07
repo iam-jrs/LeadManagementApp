@@ -21,7 +21,7 @@ interface Agent {
   email: string
 }
 
-interface Lead {
+export interface Lead {
   id: number
   status: 'new' | 'contacted' | 'qualified' | 'meeting_scheduled' | 'meeting_done' | 'hot' | 'booking_done'
   sub_status: string
@@ -54,7 +54,7 @@ interface PaginatedResponse<T> {
   }
 }
 
-interface CreateLeadPayload {
+export interface CreateLeadPayload {
   client_name: string
   mobile_number: string
   dial_code: string

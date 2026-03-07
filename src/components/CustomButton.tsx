@@ -1,5 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, ActivityIndicator, ViewStyle, TextStyle } from 'react-native';
+import { K } from '../constants/AppConstants';
 
 interface CustomButtonProps {
   title: string;
@@ -38,18 +39,18 @@ const CustomButton: React.FC<CustomButtonProps> = ({
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#007AFF',
+    backgroundColor: K.colorsConstants.primary,
     paddingVertical: 14,
     borderRadius: 6,
     alignItems: 'center',
     marginVertical: 8,
   },
   buttonDisabled: {
-    backgroundColor: '#b0b0b0',
+    backgroundColor: K.colorsConstants.disable,
   },
   buttonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: K.fontSizeConstants.regular,
     fontWeight: 'bold',
   },
 });

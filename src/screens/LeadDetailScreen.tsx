@@ -1,25 +1,176 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Linking, TextInput, ScrollView } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '../store/store';
+import leadsData from '../mock/data.json';
+import { Dropdown } from 'react-native-element-dropdown';
+import { updateLead } from '../store/leadSlice';
+console.log('updateLead:', updateLead);
+import CustomButton from '../components/CustomButton';
+import { K } from '../constants/AppConstants';
 
-const LeadDetailScreen = () => {
+const LeadDetailScreen = ({ route }: any) => {
+  const { leadId } = route.params;
+  const dispatch = useDispatch();
+  const lead = useSelector((state: RootState) => state.lead.leads.find(l => l.id === leadId));
+  const [status, setStatus] = useState(lead?.status || '');
+  const [comment, setComment] = useState(lead?.comments || '');
+
+  // Update status in store when changed
+  const handleStatusChange = (item: any) => {
+    setStatus(item.value);
+    dispatch(updateLead({ id: leadId, status: item.value }));
+  };
+
+  // Update comments in store when blurred
+  const handleCommentBlur = () => {
+    if (comment !== lead?.comments) {
+      dispatch(updateLead({ id: leadId, comments: comment }));
+    }
+  };
+
+  if (!lead) {
+    return (
+      <View style={styles.container}><Text>Lead not found.</Text></View>
+    );
+  }
+
+  const handleCall = () => {
+    Linking.openURL(`tel:${lead.client.mobile_number}`);
+  };
+  const handleWhatsApp = () => {
+    Linking.openURL(`whatsapp://send?phone=${lead.client.mobile_number}`);
+  };
+  const handleEmail = () => {
+    if (lead.client.email) {
+      Linking.openURL(`mailto:${lead.client.email}`);
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Lead Detail</Text>
-    </View>
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.section}>
+        <Text style={styles.label}>Client Name:</Text>
+        <Text style={styles.value}>{lead.client.name}</Text>
+        <Text style={styles.label}>Mobile:</Text>
+        <Text style={styles.value}>{lead.client.mobile_number}</Text>
+        <Text style={styles.label}>Email:</Text>
+        <Text style={styles.value}>{lead.client.email || '-'}</Text>
+        <Text style={styles.label}>Project:</Text>
+        <Text style={styles.value}>{lead.project.name}</Text>
+        <Text style={styles.label}>Assignee:</Text>
+        <Text style={styles.value}>{lead.agent.name}</Text>
+        <Text style={styles.label}>Source:</Text>
+        <Text style={styles.value}>{lead.source}</Text>
+        <Text style={styles.label}>Created:</Text>
+        <Text style={styles.value}>{new Date(lead.created_at).toLocaleString()}</Text>
+      </View>
+      <View style={styles.section}>
+        <Text style={styles.label}>Status:</Text>
+        <Dropdown
+          style={styles.dropdown}
+          data={leadsData.statuses.map((s: any) => ({ label: s.label, value: s.value }))}
+          labelField="label"
+          valueField="value"
+          value={status}
+          onChange={handleStatusChange}
+        />
+      </View>
+      <View style={styles.section}>
+        <Text style={styles.label}>Notes/Comments:</Text>
+        <TextInput
+          style={styles.textArea}
+          value={comment || ''}
+          onChangeText={setComment}
+          onBlur={handleCommentBlur}
+          placeholder="Add notes or comments..."
+          multiline
+        />
+      </View>
+      <View style={styles.actionsRow}>
+       
+        <CustomButton
+          title='Call'
+          onPress={handleCall}
+          style={styles.actionBtn}
+        />
+        <CustomButton
+          title='WhatsApp'
+          onPress={handleWhatsApp}
+          style={styles.actionBtn}
+        />
+        <CustomButton
+          title='Email'
+          onPress={handleEmail}
+          style={styles.actionBtn}
+        />
+      
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexGrow: 1,
     backgroundColor: '#fff',
+    padding: 20,
+    alignItems: 'center',
   },
   title: {
-    fontSize: 24,
+    fontSize: K.fontSizeConstants.headings,
+    fontWeight: 'bold',
     marginBottom: 20,
   },
+  section: {
+    width: '100%',
+    marginBottom: 18,
+  },
+  label: {
+    fontWeight: 'bold',
+    fontSize: K.fontSizeConstants.regular,
+    marginTop: 6,
+  },
+  value: {
+    fontSize: K.fontSizeConstants.regular,
+    marginBottom: 2,
+  },
+  dropdown: {
+    width: '100%',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    padding: 10,
+    marginTop: 6,
+    fontSize: K.fontSizeConstants.regular,
+    backgroundColor: '#fafafa',
+  },
+  textArea: {
+    width: '100%',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    padding: 10,
+    minHeight: 70,
+    fontSize: K.fontSizeConstants.regular,
+    backgroundColor: '#fafafa',
+    marginTop: 6,
+    textAlignVertical: 'top',
+  },
+  actionsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginTop: 20,
+  },
+  actionBtn: {
+    flex: 1,
+    padding: 14,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginHorizontal: 6,
+  },
+ 
 });
 
 export default LeadDetailScreen;

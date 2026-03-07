@@ -11,4 +11,6 @@ export const colors = {
   appTextColor: '#090909',
   appBackgroundColor: '#ffffff',
   divider: '#ffffff25',
+  primary: '#0A3D62',
+  disable: '#646a6eff',
 };
