@@ -1,97 +1,135 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+LeadManagementApp
 
-# Getting Started
+LeadManagementApp is a cross-platform mobile CRM application built with React Native for managing real estate leads. The application allows agents to login, view leads, search/filter leads, view lead details, and create new leads.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+The app supports both iOS and Android and demonstrates clean architecture, state management, and scalable component design.
 
-## Step 1: Start Metro
+====================================================================================================
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+✨ Features
+ - Authentication
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+ - Secure token storage
 
-```sh
-# Using npm
-npm start
+ - Persistent login session
 
-# OR using Yarn
+ - Leads Management
+
+ - View paginated list of leads
+
+ - Search leads by client name or mobile number
+
+ - Filter leads by status
+
+ - Sort leads by creation date
+
+ - Pull-to-refresh support
+
+ - Lead Details
+
+ - View complete lead information
+
+ - Update lead status
+
+ - Add comments/notes
+
+ - Lead Creation
+
+ - Form validation using react-hook-form
+
+ - Call,Send WhatsApp message or/and Send Email to client
+
+====================================================================================================
+
+Additional Features
+
+ - Light/Dark mode (system based)
+
+ - Reusable UI components
+
+ - Toast notifications for feedback
+
+====================================================================================================
+
+📁 Project Structure
+src/
+ ├── components/
+ │     ├── CustomButton
+ │     └── CustomTextInput
+ │
+ ├── screens/
+ │     ├── LoginScreen
+ │     ├── LeadsListScreen
+ │     ├── LeadDetailScreen
+ │     └── AddLeadScreen
+ │
+ ├── navigation/
+ │     ├── RootNavigator
+ │     ├── AuthNavigator
+ │     └── AppNavigator
+ │
+ ├── store/
+ │     ├── authSlice
+ │     └── leadSlice
+ │
+ ├── utils/
+ ├── types/
+ └── constants/
+
+====================================================================================================
+📦 Setup Instructions
+
+- Clone repository 
+
+git clone https://github.com/iam-jrs/LeadManagementApp.git
+
+cd LeadManagementApp
+
+- Install dependencies
+
+npm install
+
+- Install iOS dependencies
+
+cd ios
+pod install
+cd ..
+====================================================================================================
+▶️ Running the App
+- Start Metro
 yarn start
-```
 
-## Step 2: Build and run your app
-
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
-
-### Android
-
-```sh
-# Using npm
-npm run android
-
-# OR using Yarn
+- Run Android
 yarn android
-```
 
-### iOS
-
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
-bundle exec pod install
-```
-
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
-npm run ios
-
-# OR using Yarn
+- Run iOS
 yarn ios
-```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+====================================================================================================
+📸 Screenshots
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+Attached in the mail.
 
-## Step 3: Modify your app
+====================================================================================================
 
-Now that you have successfully run the app, let's make changes!
+🏗 Architecture Decisions
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+Redux Toolkit - Chosen for scalable state management and predictable state updates.
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+React Hook Form - Provides performant form handling with minimal re-renders.
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+MMKV Storage and keychain storage - Used for fast and secure storage of authentication tokens.
 
-## Congratulations! :tada:
+Component Reusability - Reusable UI components ensure consistent design and maintainability.
 
-You've successfully run and modified your React Native App. :partying_face:
+Navigation Architecture - Navigation is separated into AuthNavigator and AppNavigator to handle authentication flow.
 
-### Now what?
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+====================================================================================================
 
-# Troubleshooting
+📚 References
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+React Native Documentation - https://reactnative.dev/docs/getting-started
+Redux Toolkit Documentation - https://redux-toolkit.js.org/introduction/getting-started
+React Navigation Documentation - https://reactnavigation.org/docs/stack-navigator/
+React Native MMKV Documentation - https://github.com/mrousavy/react-native-mmkv
