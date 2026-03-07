@@ -1,3 +1,4 @@
+// LoginScreen handles user authentication via email and OTP, with theme and persistent storage support.
 import React, { useState, useContext } from 'react';
 import {
   View,
@@ -10,19 +11,27 @@ import CustomButton from '../components/CustomButton';
 import CustomTextInput from '../components/CustomTextInput';
 import { useForm, Controller } from 'react-hook-form';
 import { storeTokens } from '../utils/tokenStorage';
-import { useAuth } from '../store/AuthContext';
+import { useAuth } from '../context/AuthContext';
 import { LoginFormValues } from '../types';
 import Toast from 'react-native-toast-message';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ThemeContext } from '../context/ThemeContext';
 import { createMMKV } from 'react-native-mmkv';
+import { IcTick } from '../assets/icons/IcTick';
+import { K } from '../constants/AppConstants';
 
+// Mock OTP for demonstration (replace with real OTP logic in production)
 const MOCK_OTP = '1234';
 
+// Main LoginScreen component
 const LoginScreen = () => {
+  // Get login function from AuthContext
   const { login } = useAuth();
+  // Get theme from ThemeContext
   const { theme } = useContext(ThemeContext);
-   const storage =  createMMKV();
+  // MMKV storage instance for persistent data
+  const storage = createMMKV();
+  // React Hook Form setup
   const {
     control,
     handleSubmit,
@@ -32,16 +41,18 @@ const LoginScreen = () => {
   } = useForm<LoginFormValues>({
     defaultValues: { email: '', otp: '', rememberMe: false },
   });
+  // Local state for loading and step (email or otp)
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState<'email' | 'otp'>('email');
 
 
+  // Handle email submission: validate and move to OTP step
   const onSubmitEmail = (data: LoginFormValues) => {
     clearErrors('email');
-  
     setStep('otp');
   };
 
+  // Handle OTP submission: validate OTP, store tokens, and log in
   const onSubmitOtp = async (data: LoginFormValues) => {
     setLoading(true);
     clearErrors('otp');
@@ -61,6 +72,7 @@ const LoginScreen = () => {
           text1: 'Login Successful',
         });
         login();
+        // Store rememberMe preference
         storage.set('rememberMe', data.rememberMe ? true : false);
       } catch (error) {
         Toast.show({
@@ -73,16 +85,21 @@ const LoginScreen = () => {
     }, 1200);
   };
 
+  // Render login UI: email step, OTP step, and loading indicator
   return (
     <SafeAreaView
       style={[styles.container, { backgroundColor: theme.background }]}
     >
+      {/* Header section */}
       <View style={{ alignItems: 'center', marginBottom: 40, gap: 10 }}>
         <Text style={[styles.title, { color: theme.text }]}>Login</Text>
         <Text style={{ color: theme.text, marginBottom: 20 }}>
-            {step === 'email'? 'Enter your email to get OTP.' : 'Enter the OTP sent to your email.'}
+          {step === 'email'
+            ? 'Enter your email to get OTP.'
+            : 'Enter the OTP sent to your email.'}
         </Text>
       </View>
+      {/* Email input step */}
       {step === 'email' && (
         <View style={styles.formSection}>
           <Controller
@@ -105,13 +122,10 @@ const LoginScreen = () => {
                 errStatus={!!errors.email}
                 showValidation={!!errors.email}
                 validationText={errors.email?.message}
-                style={
-                  styles.input
-                }
+                style={styles.input}
               />
             )}
           />
-
           <CustomButton
             title="Send OTP"
             onPress={handleSubmit(onSubmitEmail)}
@@ -119,6 +133,7 @@ const LoginScreen = () => {
           />
         </View>
       )}
+      {/* OTP input step */}
       {step === 'otp' && (
         <View style={styles.formSection}>
           <Controller
@@ -134,7 +149,6 @@ const LoginScreen = () => {
               <CustomTextInput
                 hintText="Enter OTP"
                 keyboardType="numeric"
-                
                 inputValue={value}
                 onInputTextChange={onChange}
                 maxLength={4}
@@ -145,6 +159,7 @@ const LoginScreen = () => {
               />
             )}
           />
+          {/* Remember me checkbox */}
           <Controller
             control={control}
             name="rememberMe"
@@ -163,13 +178,21 @@ const LoginScreen = () => {
                       borderColor: theme.primary,
                     },
                   ]}
-                />
+                >{value && (
+                  <IcTick
+                    width={14}
+                    height={14}
+                    strokeColor={K.colorsConstants.white}
+                    strokeWidth={2}
+                  />)}
+                </View>
                 <Text style={[styles.checkboxLabel, { color: theme.text }]}>
                   Remember me
                 </Text>
               </TouchableOpacity>
             )}
           />
+        
           <CustomButton
             title="Login"
             onPress={handleSubmit(onSubmitOtp)}
@@ -177,6 +200,7 @@ const LoginScreen = () => {
           />
         </View>
       )}
+      {/* Loading indicator */}
       {loading && <ActivityIndicator style={{ marginTop: 20 }} />}
     </SafeAreaView>
   );
@@ -219,6 +243,8 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     marginRight: 8,
     backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   checkboxChecked: {
     backgroundColor: '#007AFF',

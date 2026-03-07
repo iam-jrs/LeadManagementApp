@@ -1,3 +1,4 @@
+// LeadDetailScreen displays and allows editing of a single lead's details, with theme support.
 import React, { useState, useContext } from 'react';
 import { ThemeContext } from '../context/ThemeContext';
 import { View, Text, StyleSheet, TouchableOpacity, Linking, TextInput, ScrollView } from 'react-native';
@@ -10,11 +11,17 @@ console.log('updateLead:', updateLead);
 import CustomButton from '../components/CustomButton';
 import { K } from '../constants/AppConstants';
 
+// Main LeadDetailScreen component
 const LeadDetailScreen = ({ route }: any) => {
+  // Get leadId from navigation params
   const { leadId } = route.params;
+  // Theme context
   const { theme } = useContext(ThemeContext);
+  // Redux hooks
   const dispatch = useDispatch();
+  // Find the lead by id
   const lead = useSelector((state: RootState) => state.lead.leads.find(l => l.id === leadId));
+  // Local state for status and comments
   const [status, setStatus] = useState(lead?.status || '');
   const [comment, setComment] = useState(lead?.comments || '');
 
@@ -31,12 +38,16 @@ const LeadDetailScreen = ({ route }: any) => {
     }
   };
 
+  // If lead not found, show message
   if (!lead) {
     return (
-      <View style={[styles.container, { backgroundColor: theme.background }] }><Text style={{ color: theme.text }}>Lead not found.</Text></View>
+      <View style={[styles.container, { backgroundColor: theme.background }] }>
+        <Text style={{ color: theme.text }}>Lead not found.</Text>
+      </View>
     );
   }
 
+  // Action handlers for call, WhatsApp, and email
   const handleCall = () => {
     Linking.openURL(`tel:${lead.client.mobile_number}`);
   };
@@ -49,6 +60,7 @@ const LeadDetailScreen = ({ route }: any) => {
     }
   };
 
+  // Render lead details UI
   return (
     <ScrollView
       contentContainerStyle={[
@@ -56,34 +68,36 @@ const LeadDetailScreen = ({ route }: any) => {
         { backgroundColor: theme.background },
       ]}
     >
+      {/* Lead info section */}
       <View style={styles.section}>
         <Text style={[styles.label, { color: theme.text }]}>Client Name:</Text>
-        <Text style={[styles.value, { color: theme.text }]}>
+        <Text style={[styles.value, { color: theme.text }]}> 
           {lead.client.name}
         </Text>
         <Text style={[styles.label, { color: theme.text }]}>Mobile:</Text>
-        <Text style={[styles.value, { color: theme.text }]}>
+        <Text style={[styles.value, { color: theme.text }]}> 
           {lead.client.mobile_number}
         </Text>
         <Text style={[styles.label, { color: theme.text }]}>Email:</Text>
-        <Text style={[styles.value, { color: theme.text }]}>
+        <Text style={[styles.value, { color: theme.text }]}> 
           {lead.client.email || '-'}
         </Text>
         <Text style={[styles.label, { color: theme.text }]}>Project:</Text>
-        <Text style={[styles.value, { color: theme.text }]}>
+        <Text style={[styles.value, { color: theme.text }]}> 
           {lead.project.name}
         </Text>
         <Text style={[styles.label, { color: theme.text }]}>Assignee:</Text>
-        <Text style={[styles.value, { color: theme.text }]}>
+        <Text style={[styles.value, { color: theme.text }]}> 
           {lead.agent.name}
         </Text>
         <Text style={[styles.label, { color: theme.text }]}>Source:</Text>
         <Text style={[styles.value, { color: theme.text }]}>{lead.source}</Text>
         <Text style={[styles.label, { color: theme.text }]}>Created:</Text>
-        <Text style={[styles.value, { color: theme.text }]}>
+        <Text style={[styles.value, { color: theme.text }]}> 
           {new Date(lead.created_at).toLocaleString()}
         </Text>
       </View>
+      {/* Status dropdown section */}
       <View style={styles.section}>
         <Text style={[styles.label, { color: theme.text }]}>Status:</Text>
         <Dropdown
@@ -100,8 +114,9 @@ const LeadDetailScreen = ({ route }: any) => {
           selectedTextStyle={{ color: theme.text }}
         />
       </View>
+      {/* Notes/comments section */}
       <View style={styles.section}>
-        <Text style={[styles.label, { color: theme.text }]}>
+        <Text style={[styles.label, { color: theme.text }]}> 
           Notes/Comments:
         </Text>
         <TextInput
@@ -117,6 +132,7 @@ const LeadDetailScreen = ({ route }: any) => {
           multiline
         />
       </View>
+      {/* Action buttons for call, WhatsApp, and email */}
       <View style={styles.actionsRow}>
         <CustomButton
           title="Call"
@@ -130,6 +146,7 @@ const LeadDetailScreen = ({ route }: any) => {
         />
         <CustomButton
           title="Email"
+          disabled={!lead.client.email}
           onPress={handleEmail}
           style={styles.actionBtn}
         />

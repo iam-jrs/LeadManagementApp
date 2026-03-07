@@ -11,14 +11,18 @@ import CustomButton from '../components/CustomButton';
 import { K } from '../constants/AppConstants';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+// Number of leads to load per page
 const PAGE_SIZE = 20;
 
+// Helper to get status label from value
 const getStatusLabel = (statuses: any[], value: string) => {
   const found = statuses.find((s) => s.value === value);
   return found ? found.label : value;
 };
 
+// Main LeadsListScreen component: displays, filters, sorts, and paginates leads
 const LeadsListScreen = ({ navigation }: any) => {
+  // Search/filter/sort/pagination state
   const [search, setSearch] = useState('');
   const { theme } = useContext(ThemeContext);
   const [statusFilter, setStatusFilter] = useState<string | null>(null);
@@ -28,22 +32,24 @@ const LeadsListScreen = ({ navigation }: any) => {
   const [displayedLeads, setDisplayedLeads] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
+  // All leads from Redux store
   const allLeads = useSelector((state: RootState) => state.lead.leads);
+  // Status options from mock data
   const statuses = leadsData.statuses;
 
-  // Filtering, searching, sorting
+  // Filtering, searching, sorting logic for leads
   const getFilteredLeads = useCallback(() => {
     let leads = [...allLeads];
     if (search) {
-      const s = search.toLowerCase();
+      const search_text = search.toLowerCase();
       leads = leads.filter(
-        (l) =>
-          l.client.name.toLowerCase().includes(s) ||
-          l.client.mobile_number.includes(s)
+        (lead) =>
+          lead.client.name.toLowerCase().includes(search_text) ||
+          lead.client.mobile_number.includes(search_text)
       );
     }
     if (statusFilter) {
-      leads = leads.filter((l) => l.status === statusFilter);
+      leads = leads.filter((lead) => lead.status === statusFilter);
     }
     leads.sort((a, b) => {
       const d1 = new Date(a.created_at).getTime();
@@ -53,12 +59,13 @@ const LeadsListScreen = ({ navigation }: any) => {
     return leads;
   }, [allLeads, search, statusFilter, sortAsc]);
 
-  // Pagination
+  // Pagination: update displayedLeads when filters/page change
   useEffect(() => {
     const leads = getFilteredLeads();
     setDisplayedLeads(leads.slice(0, page * PAGE_SIZE));
   }, [getFilteredLeads, page]);
 
+  // Pull-to-refresh handler
   const onRefresh = () => {
     setRefreshing(true);
     setTimeout(() => {
@@ -67,6 +74,7 @@ const LeadsListScreen = ({ navigation }: any) => {
     }, 800);
   };
 
+  // Infinite scroll handler for pagination
   const onEndReached = () => {
     if (displayedLeads.length < getFilteredLeads().length) {
       setLoading(true);
@@ -77,6 +85,7 @@ const LeadsListScreen = ({ navigation }: any) => {
     }
   };
 
+  // Render a single lead card
   const renderLead = ({ item }: { item: any }) => (
     <TouchableOpacity
       style={[styles.card, { backgroundColor: theme.card, shadowColor: theme.shadow }]}
@@ -90,11 +99,13 @@ const LeadsListScreen = ({ navigation }: any) => {
     </TouchableOpacity>
   );
 
+  // Render leads list UI: search, filter, sort, and paginated list
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: theme.background }}
       edges={['bottom']}
     >
+      {/* Status bar and floating add button */}
       <StatusBar backgroundColor={theme.background} barStyle={theme.dark ? 'light-content' : 'dark-content'} />
       <View style={[styles.container, { backgroundColor: theme.background }]}>
         <CustomButton
@@ -109,6 +120,7 @@ const LeadsListScreen = ({ navigation }: any) => {
             backgroundColor: theme.primary,
           }}
         />
+        {/* Search input */}
         <View style={styles.headerRow}>
           <CustomTextInput
             style={styles.searchInput}
@@ -118,6 +130,7 @@ const LeadsListScreen = ({ navigation }: any) => {
           />
         </View>
 
+        {/* Filter and sort row */}
         <View style={styles.filterRow}>
           <View
             style={{
@@ -127,6 +140,7 @@ const LeadsListScreen = ({ navigation }: any) => {
               justifyContent: 'space-between',
             }}
           >
+            {/* Sort button */}
             <TouchableOpacity
               style={[
                 styles.filterBtn,
@@ -165,6 +179,7 @@ const LeadsListScreen = ({ navigation }: any) => {
               </View>
             </TouchableOpacity>
 
+            {/* Status filter dropdown */}
             <Dropdown
               style={[
                 styles.dropdown,
@@ -191,6 +206,7 @@ const LeadsListScreen = ({ navigation }: any) => {
           </View>
         </View>
 
+        {/* Paginated leads list */}
         <FlatList
           data={displayedLeads}
           keyExtractor={item => item.id.toString()}

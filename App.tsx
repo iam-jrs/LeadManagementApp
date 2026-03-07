@@ -5,12 +5,13 @@ import { Provider } from 'react-redux';
 import store from './src/store/store';
 import { ThemeProvider } from './src/context/ThemeContext';
 
+
 const App = () => {
   return (
     <Provider store={store}>
       <ThemeProvider>
-        <Toast />
         <RootNavigator />
+        <Toast position="top" topOffset={60} />
       </ThemeProvider>
     </Provider>
   );
